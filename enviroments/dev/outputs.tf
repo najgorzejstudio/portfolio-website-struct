@@ -5,3 +5,7 @@ output "cloudfront_url" {
 output "s3_bucket" {
   value = module.s3_site.bucket_id
 }
+
+output "counter_api_url" {
+  value = module.api_gateway.api_url
+}
