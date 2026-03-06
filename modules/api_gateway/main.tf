@@ -8,17 +8,18 @@ resource "aws_api_gateway_rest_api" "resume_api" {
 }
 
 resource "aws_api_gateway_resource" "resume_api_resource" {
-    parent_id = aws_api_gateway_rest_api.resume_api.root_resource_id
-    path_part = "counter-path"
+    parent_id   = aws_api_gateway_rest_api.resume_api.root_resource_id
+    path_part   = "counter-path"
     rest_api_id = aws_api_gateway_rest_api.resume_api.id
   
 }
 
 resource "aws_api_gateway_method" "resume_method" {
     authorization = "NONE"
-    http_method = "POST"
-    resource_id = aws_api_gateway_resource.resume_api_resource.id
-    rest_api_id = aws_api_gateway_rest_api.resume_api.id
+    http_method   = "POST"
+    resource_id   = aws_api_gateway_resource.resume_api_resource.id
+    rest_api_id   = aws_api_gateway_rest_api.resume_api.id
+
 }
 
 resource "aws_api_gateway_integration" "lambda_integration"{
@@ -65,3 +66,13 @@ resource "aws_lambda_permission" "api_lambda_permission" {
     source_arn    = "${aws_api_gateway_rest_api.resume_api.execution_arn}/*/*/*" 
 }
 
+resource "aws_api_gateway_method_settings" "throttle" {
+    rest_api_id = aws_api_gateway_rest_api.resume_api.id
+    stage_name  = aws_api_gateway_stage.prod.stage_name
+    method_path = "*/*"
+
+    settings {
+      throttling_rate_limit  = 5
+      throttling_burst_limit = 10
+    }
+}

@@ -22,5 +22,10 @@ def handler(event, context):
 
     return{
         "statusCode": 200,
-        "body": json.dumps("visits": visit_count)
+        "headers": {
+        "Access-Control-Allow-Origin": "https://dalo6kqnbnwm5.cloudfront.net",
+        "Access-Control-Allow-Headers": "*",
+        "Access-Control-Allow-Methods": "OPTIONS,GET,POST"
+        },
+        "body": json.dumps({"visits": visit_count})
     }
